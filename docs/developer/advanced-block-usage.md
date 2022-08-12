@@ -4,13 +4,30 @@ title: Advanced Blocks API Usage
 ---
 ## Add/remove blocks in one times.
 ClipCC provides support for add/remove blocks in one times. You can use ``api.addBlocks(blocks: BlockPrototype[])`` and ``api.removeBlocks(blocksOpcode: string[])`` to implement them.
+## Filter
+ClipCC provides support for filter since version 3.1.4. Here's an example:
+```javascript
+api.addBlock({
+    opcode: 'example.block',
+    type: type.BlockType.COMMAND,
+    messageId: 'example.block',
+    categoryId: 'example.category',
+    function: () => {...},
+    option: {
+        // Only available in stage
+        filter: type.FilterType.STAGE
+    }
+});
+```
+For more block options, see [BlockPrototype - BlockOption](https://doc.codingclip.com/developer/block#block)
 ## Menu
 ClipCC provides support for menu input since version 3.1.2. The correct way to define a menu's inputs is to define a ``menu`` property within parameter.
+### Static
 ```javascript
 param: {
     PARAMETER: {
         type: type.ParameterType.STRING,
-       menu: [{
+        menu: [{
            messageId: 'example.extension.menu.type',
            value: 'type'
             }, {
@@ -20,7 +37,30 @@ param: {
                   messageId: 'example.extension.menu.zoom',
                   value: 'zoom'
             }],
-           default: 'rainbow'
+        default: 'rainbow'
+      }
+}
+```
+### Dynamic
+:::caution
+The following extension APIs are in draft and the following are subject to change in the future.
+:::
+```javascript
+param: {
+    PARAMETER: {
+        type: type.ParameterType.STRING,
+        menu: () => {
+            // return sprites
+            const vm = api.getVmInstance();
+            const sprites = [];
+			for (const targetId in vm.runtime.targets) {
+				if (!vm.runtime.targets.hasOwnProperty(targetId)) continue;
+				const name = vm.runtime.targets[targetId].sprite.name;
+				sprites.push([name, name]);
+			}
+			return sprites;
+        },
+        default: 'rainbow'
       }
 }
 ```

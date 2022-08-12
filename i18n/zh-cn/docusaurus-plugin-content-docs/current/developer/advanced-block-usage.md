@@ -4,8 +4,25 @@ title: 进阶积木 API 用法
 ---
 ## 一次性添加/删除积木
 ClipCC 提供一次性添加/删除积木的支持。 你可以使用 ``api.addBlocks(blocks: BlockPrototype[])`` 和 ``api.removeBlocks(blocksOpcode: string[])`` 来实现它们。
+## 显示条件
+ClipCC 从 3.1.4 开始提供对积木显示条件的支持。 以下是一个示例:
+```javascript
+api.addBlock({
+    opcode: 'example.block',
+    type: type.BlockType.COMMAND,
+    messageId: 'example.block',
+    categoryId: 'example.category',
+    function: () => {...},
+    option: {
+        // 仅在舞台中显示
+        filter: type.FilterType.STAGE
+    }
+});
+```
+对于更多积木选项, 请查看 [BlockPrototype - BlockOption](https://doc.codingclip.com/zh-cn/developer/block#block)
 ## 菜单
 ClipCC 从 3.1.2 开始提供对菜单输入的支持。正确定义菜单的方式是在 parameter 属性内定义包含菜单项的``menu``属性。
+## 菜单
 ```javascript
 param: {
     PARAMETER: {
@@ -21,6 +38,29 @@ param: {
                   value: 'zoom'
             }],
            default: 'rainbow'
+      }
+}
+```
+### 动态菜单
+:::caution
+以下所涉及的扩展API能处于草案阶段，所涉及的内容可能在未来被修改。
+:::
+```javascript
+param: {
+    PARAMETER: {
+        type: type.ParameterType.STRING,
+        menu: () => {
+            // 返回当前所有角色
+            const vm = api.getVmInstance();
+            const sprites = [];
+			for (const targetId in vm.runtime.targets) {
+				if (!vm.runtime.targets.hasOwnProperty(targetId)) continue;
+				const name = vm.runtime.targets[targetId].sprite.name;
+				sprites.push([name, name]);
+			}
+			return sprites;
+        },
+        default: 'rainbow'
       }
 }
 ```

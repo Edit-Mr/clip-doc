@@ -97,6 +97,11 @@ class ShadowPrototype {
 class BlockOption {
     terminal?: boolean;
     monitor?: boolean;
+    filter?: FilterType;
+}
+
+enum FilterType {
+    SPRITE, STAGE, ALL, HIDE
 }
 
 function addBlock(block: BlockPrototype): void;
