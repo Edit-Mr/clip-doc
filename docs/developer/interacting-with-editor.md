@@ -18,7 +18,7 @@ Now you can modify something in the editor. Here's an example.
 // Get the frame rate.
 const frameRate = VM.runtime.frameRate;
 // Modify the frame rate.
-VM.runtime.setFrameRate(30);
+VM.runtime.setFramerate(30);
 ```
 You can also override a class or function.
 ```javascript
