@@ -1,17 +1,17 @@
 ---
 sidebar_position: 3
-title: 开发
+title: 開發
 ---
 
-## 安装
+## 安裝
 
 :::tip
 
-请确保在开始之前已经安装了[Node.js](https:////www.nodejs.org)和[Git](https://git-scm.com/)，此外我们建议使用 Linux 而不是 Windows 进行配置
+請確保在開始之前已經安裝了[Node.js](https:////www.nodejs.org)和[Git](https://git-scm.com/)，此外我們建議使用 Linux 而不是 Windows 進行配置
 
 :::
 
-### 在现有的 React 应用中使用
+### 在現有的 React 應用中使用
 ```bash
 yarn install clipcc-gui@latest
 ```
@@ -19,21 +19,21 @@ yarn install clipcc-gui@latest
 ```bash
 yarn install https://github.com/Clipteam/clipcc-gui.git
 ```
-### 下载源码并运行
+### 下載源碼並運行
 ```bash
 git clone https://github.com/Clipteam/clipcc-gui.git
 cd clipcc-gui
 yarn install
 yarn start
 ```
-然后前往 [http://localhost:8601/](http://localhost:8601/)查看运行输出
+然後前往 [http://localhost:8601/](http://localhost:8601/)查看運行輸出
 
-如果你想要编辑`clipcc-vm`或`clipcc-block`，请使用 ``yarn link``
+如果你想要編輯`clipcc-vm`或`clipcc-block`，請使用 ``yarn link``
 ```bash
-# 请先在工作目录中clone你需要的仓库
+# 請先在工作目錄中clone你需要的倉庫
 cd clipcc-vm && yarn && yarn link
 cd clipcc-block && yarn
-# 编译clipcc-block并link它，需要Python 3
+# 編譯clipcc-block並link它，需要Python 3
 yarn build
 yarn link
 # ...
@@ -42,61 +42,62 @@ yarn link clipcc-vm clipcc-block
 yarn start
 ```
 :::note 
-只有 ``clipcc-vm`` 和 ``clipcc-gui`` 支持热重载
+只有 ``clipcc-vm`` 和 ``clipcc-gui`` 支持熱重載
 :::
 
-**如果你需要在其他应用中引用 ``clipcc-gui`` 的本地副本，你需要先执行 ``yarn build:dist``**
+**如果你需要在其他應用中引用 ``clipcc-gui`` 的本地副本，你需要先執行 ``yarn build:dist``**
 
-你也可以使用Yarn工作区, 详情[点此](hhttps://classic.yarnpkg.com/blog/2017/08/02/introducing-workspaces/)
+你也可以使用Yarn工作區, 詳情[點此](hhttps://classic.yarnpkg.com/blog/2017/08/02/introducing-workspaces/)
 
-### 和原版 Scratch 的区别
+### 和原版 Scratch 的區別
 1. clipcc-gui 使用 React 17.0.2 而不是 React 16.2
-2. clipcc-block 重写了编译脚本以使用 Python3，并可以在 Windows 上运行
-3. 切换包管理器为 Yarn
-## 测试
-### Documentation
+2. clipcc-block 重寫了編譯腳本以使用 Python3，並可以在 Windows 上運行
+3. 切換包管理器為 Yarn
+## 測試
+### 文檔
 
-You may want to review the documentation for [Jest](https://facebook.github.io/jest/docs/en/api.html) and [Enzyme](http://airbnb.io/enzyme/docs/api/) as you write your tests.
+在編寫測試前你也許會想閱讀[Jest](https://facebook.github.io/jest/docs/en/api.html)和[Enzyme](http://airbnb.io/enzyme/docs/api/)的文檔
 
-See [jest cli docs](https://facebook.github.io/jest/docs/en/cli.html#content) for more options.
+到[jest cli docs](https://facebook.github.io/jest/docs/en/cli.html#content)來查看更多選項
 
-### Running tests
+### 執行測試
 
-*NOTE: If you're a Windows user, please run these scripts in Windows `cmd.exe`  instead of Git Bash/MINGW64.*
+*筆記: 如果你是Windows使用者，請在Windows的`cmd.exe`  執行而不是Git Bash/MINGW64.*
 
-Before running any test, make sure you have run `yarn install` from this (clipcc-gui) repository's top level.
+在執行任何程式前，請先確保有先在這個資料夾(clipcc-gui)的最頂層執行`yarn install`。
 
-#### Main testing command
+#### 主要測試指令
 
-To run linter, unit tests, build, and integration tests, all at once:
+一次執行Tlinter, unit tests, build，和integration tests
 ```bash
 yarn test
 ```
 
-#### Running unit tests
+#### 執行單位測試
 
-To run unit tests in isolation:
+單獨運行單元測試：
 ```bash
 yarn run test:unit
 ```
 
-To run unit tests in watch mode (watches for code changes and continuously runs tests):
+在監視模式下運行單元測試（監視代碼更變並持續運行測試):
 ```bash
 yarn run test:unit -- --watch
 ```
 
-You can run a single file of integration tests (in this example, the `button` tests):
+您可以運行單個集成測試文件（在此示例中執行`按鈕`測試）：
 
 ```bash
 $(yarn bin)/jest --runInBand test/unit/components/button.test.jsx
 ```
 
-#### Running integration tests
+#### 運行集成測試
 
-Integration tests use a headless browser to manipulate the actual HTML and javascript that the repo
-produces. You will not see this activity (though you can hear it when sounds are played!).
+集成測試使用無頭瀏覽器來操作repo中實際的HTML和javascript。
 
-Note that integration tests require you to first create a build that can be loaded in a browser:
+您將看不到此動作（儘管在播放聲音時您可以聽到它！）。
+
+請注意，集成測試要求您首先創建一個可以在瀏覽器中加載的構建：
 
 ```bash
 yarn run build
@@ -182,16 +183,4 @@ Further reading: [Stack Overflow](https://stackoverflow.com/questions/46602286/n
 
 These are names for the action which causes a state change. Some examples are:
 
-* `START_FETCHING_NEW`,
-* `DONE_FETCHING_WITH_ID`,
-* `DONE_LOADING_VM_WITH_ID`,
-* `SET_PROJECT_ID`,
-* `START_AUTO_UPDATING`,
-
-### How transitions relate to loading states
-
-Like this diagram of the project state machine shows, various transition actions can move us from one loading state to another:
-
-![Project state diagram](/img/project_state_diagram.svg)
-
-_Note: for clarity, the diagram above excludes states and transitions relating to error handling._
+* `START_FETCHIN
