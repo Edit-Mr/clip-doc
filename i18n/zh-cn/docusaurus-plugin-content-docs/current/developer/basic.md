@@ -5,10 +5,10 @@ title: 基础教程
 
 本教程将通过编写一个简单的扩展来说明编写ClipCC扩展的基本流程。
 
-
 :::tip  准备工作
+
 1. 你需要一台状态良好的电脑，为了您的设备安全，请不要使用**手机**，**空调**，**遥控器**等设备开发
-2. 你需要安装 **Node.js** 和 **npm** （安装 Node.js 的时候应该已经自带了），当然你也可以使用 **Yarn** 
+2. 你需要安装 **Node.js** 和 **npm** （安装 Node.js 的时候应该已经自带了），当然你也可以使用 **Yarn**
 3. 用于编写代码的编辑器，我们推荐 **VSCode**，请切记不要使用**记事本**编写代码！
 :::
 
@@ -24,7 +24,6 @@ ccext-cli
 
 在最后一步中，ccext-cli会询问有关扩展信息的问题。我们将使用``JavaScript（CommonJS）``进行开发，所以请选择JavaScript作为你的编程语言。~~虽然我更喜欢TypeScript~~
 
-
 ![Image loading...](/img/extension-cli-zh.jpg)
 
 回答问题后，ccext-cli将自动安装所需依赖，并自动生成一个空的ClipCC扩展项目
@@ -33,7 +32,7 @@ ccext-cli
 
 你的扩展目录应该看起来像这样
 
-```
+```bash
 assets/
 - icon.jpg
 - inset_icon.svg

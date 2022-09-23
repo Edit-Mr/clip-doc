@@ -1,144 +1,115 @@
 ---
-sidebar_position: 6
-title: 进阶积木 API 用法
+sidebar_position: 2
+title: 基礎教程
 ---
-## 一次性添加/删除积木
-ClipCC 提供一次性添加/删除积木的支持。 你可以使用 ``api.addBlocks(blocks: BlockPrototype[])`` 和 ``api.removeBlocks(blocksOpcode: string[])`` 来实现它们。
-## 显示条件
-ClipCC 从 3.1.4 开始提供对积木显示条件的支持。 以下是一个示例:
-```javascript
-api.addBlock({
-    opcode: 'example.block',
-    type: type.BlockType.COMMAND,
-    messageId: 'example.block',
-    categoryId: 'example.category',
-    function: () => {...},
-    option: {
-        // 仅在舞台中显示
-        filter: type.FilterType.STAGE
-    }
-});
-```
-对于更多积木选项, 请查看 [BlockPrototype - BlockOption](https://doc.codingclip.com/zh-cn/developer/block#block)
-## 菜单
-ClipCC 从 3.1.2 开始提供对菜单输入的支持。正确定义菜单的方式是在 parameter 属性内定义包含菜单项的``menu``属性。
-## 菜单
-```javascript
-param: {
-    PARAMETER: {
-        type: type.ParameterType.STRING,
-       menu: [{
-           messageId: 'example.extension.menu.type',
-           value: 'type'
-            }, {
-                   messageId: 'example.extension.menu.rainbow',
-                   value: 'rainbow'
-            }, {
-                  messageId: 'example.extension.menu.zoom',
-                  value: 'zoom'
-            }],
-           default: 'rainbow'
-      }
-}
-```
-### 动态菜单
-:::caution
-以下所涉及的扩展API能处于草案阶段，所涉及的内容可能在未来被修改。
+
+本教程將通過編寫一個簡單的擴充套件來說明編寫ClipCC擴充套件的基本流程。
+
+
+:::tip  準備工作
+1. 你需要一臺狀態良好的電腦，爲了您的裝置安全，請不要使用**手機**，**空調**，**遙控器**等裝置開發
+2. 你需要安裝 **Node.js** 和 **npm** （安裝 Node.js 的時候應該已經自帶了），當然你也可以使用 **Yarn** 
+3. 用於編寫程式碼的編輯器，我們推薦 **VSCode**，請切記不要使用**記事本**編寫程式碼！
 :::
-```javascript
-param: {
-    PARAMETER: {
-        type: type.ParameterType.STRING,
-        menu: () => {
-            // 返回当前所有角色
-            const vm = api.getVmInstance();
-            const sprites = [];
-			for (const targetId in vm.runtime.targets) {
-				if (!vm.runtime.targets.hasOwnProperty(targetId)) continue;
-				const name = vm.runtime.targets[targetId].sprite.name;
-				sprites.push([name, name]);
-			}
-			return sprites;
-        },
-        default: 'rainbow'
-      }
-}
-```
-如果你想定义一个不可动态输入的菜单, 那么你可以将``field`` 属性设置为 true.
-```javascript
-param: {
-    PARAMETER: {
-        type: type.ParameterType.STRING,
-        default: 'something',
-        field: true,
-        menu: [...]
-      }
-},
-```
-## 帽状积木
-这个简单的实例阐述了如何定义一个 ``HAT`` 类型的积木:
-```javascript
-api.addBlock({
-        opcode: 'example.hat',
-        type: type.BlockType.HAT,
-        messageId: 'example.hat',
-        categoryId: 'example.category',
-        param: {
-            CONDITION: {
-                type: type.ParameterType.BOOLEAN
-            }
-        },
-        function: (args) => {
-            if (!!hasReported) {
-                window.hasReported = false;
-                return false;
-            }
-            const result = !!args.CONDITION;
-            if (result) {
-                hasReported = true;
-                return true;
-            }
-            return false;
-        }
-});
-```
-当积木被拖拽至工作区后，项目会进入“假”运行状态（绿旗高亮，但没有脚本被触发）。编辑器每帧都会检查该 HAT 是否被触发。只有当上一帧返回``false``且当前帧返回``true``时积木才会正常被调用。
 
-## 树状积木
-ClipCC 从 3.1.4 开始提供对树状积木的支持。以下是一个定义树状积木的定义：
+## 建立新專案
+
+```shell
+npm -g install clipcc-extension-cli # 如果你使用Yarn 請替換為yarn global add clipcc-extension-cli
+mkdir example-extension # 將example-extension替換為你的擴充套件名稱（必須要是英文！）
+cd example-extension
+npm init # 如果你使用Yarn 請替換為yarn init
+ccext-cli
+```
+
+在最後一步中，ccext-cli會詢問有關擴充套件資訊的問題。我們將使用``JavaScript（CommonJS）``進行開發，所以請選擇JavaScript作為你的程式語言。(我愛原生JS)
+
+
+![Image loading...](/img/extension-cli-zh.jpg)
+
+回答問題后，ccext-cli將自動安裝所需依賴，並自動產生一個空的ClipCC擴充套件專案
+
+## 編寫擴充套件
+
+你的擴充套件目錄應該看起來像這樣
+
+```
+assets/
+- icon.jpg
+- inset_icon.svg
+locales/
+- en.json
+index.js
+info.json
+package.json
+webpack.config.js
+```
+
+locales 目錄用於存放不同語言的翻譯文字，assets 用於存放外掛資源，index.js 是註冊模組/實現功能的主檔案，info.json 是外掛資訊
+
+讓我們先打開 index.js 並填入以下內容
+
 ```javascript title="index.js"
-api.addBlock({
-    opcode: 'example.if',
-    type: type.BlockType.COMMAND,
-    messageId: 'example.if',
-    categoryId: 'example.category',
-    branchCount: 1,
-    param: {
-        COND: {
-            type: type.ParameterType.BOOLEAN
-        }
-    },
-    function: (args, util) => {
-        // If the condition is true, start the branch.
-        if (!!args.COND) util.startBranch(1, false);
+const {api, type, extension} = require('clipcc-extension');
+class ExampleExtension extends Extension {
+    onInit() {
+        api.addCategory({
+            // 替換為<你的擴充套件id>.category 下同
+            categoryId: 'clipteam.example.category', 
+            messageId: 'clipteam.example.category',
+            color: '#339900'
+        });
+        api.addBlock({
+            opcode: 'clipteam.example.return',
+            type: type.BlockType.REPORTER,
+            messageId: 'clipteam.example.return',
+            categoryId: 'clipteam.example.category',
+            param: {
+                VALUE: {
+                    type: type.ParameterType.STRING,
+                    default: 'Hello World!'
+                }
+            },
+            function: args => this.ReturnValue(args.VALUE)
+        });
+        api.addBlock({
+            opcode: 'clipteam.example.helloworld',
+            type: type.BlockType.COMMAND,
+            messageId: 'clipteam.example.helloworld',
+            categoryId: 'clipteam.example.category',
+            function: args => this.HelloWorld()
+        });
     }
-});
+    onUninit() {
+        api.removeCategory('clipteam.example.category');
+    }
+    ReturnValue(VALUE) {
+        return VALUE;
+    }
+    HelloWorld() {
+        console.log("Hello World!");
+        alert("Hello World!");
+    }
+}
+module.exports = ExampleExtension;
 ```
-```json title="en.json"
+
+:::tip 注意  
+返回值只能是 **String**、**Number** 或 **Boolean** 。返回其他型別可能導致作品載入失敗  
+:::
+
+然後打開 locales/en.json 填入以下內容
+
+```json title="locales/en.json"
 {
-    "example.if": "if [COND] [SUBSTACK]"
+    "clipteam.example.name": "Example",
+    "clipteam.example.category": "Example",
+    "clipteam.example.description": "ClipCC example extension",
+    "clipteam.example.return": "return [VALUE]",
+    "clipteam.example.helloworld": "Hello World!"
 }
 ```
-　　你需要在 BlockPrototype 中指定 "branchCount", 它意味着树状积木的分支数量。 你还需要在语言文件中以 [SUBSTACKX] 的命名方式定义分支参数。
-　　对于一个树状积木, 你可以通过 util 对象中的 startBranch 方法来进行流程控制。
-```javascript
-/**
-* 在当前积木下触发某个分支
-* @param {number} branchNum 触发分支的编号 (i.e., 1, 2).
-* @param {boolean} isLoop 这个分支是否是一个循环
-*/
-startBranch (branchNum, isLoop) {...}
-```
-当 ``isLoop`` 参数被设为 true 时, 积木将被重复调用，直到startBranch 不再被触发。当被设为 false 时, 当前积木将被立刻跳出。 当``branchNum``参数未被指定时, 默认为1。这里有一个关于流程控制的 [更为详细的范例](https://github.com/SimonShiki/neurons).
 
-编写这类积木通常需要对线程和调度器进行修改, 所以你需要对 Scratch/ClipCC 的代码具有一定程度上的理解。通常情况下，我们不推荐你定义这类积木。
+編寫完成後，在專案根目錄下執行 `npm run build` （或 `yarn build`），產生的外掛（.ccx檔案）可以在 dist/ 目錄下找到，然後你就可以將產生的外掛匯入到ClipCC內了。
+
+![Exmaple](https://s3.jpg.cm/2021/08/22/IbEuKQ.png)

@@ -6,6 +6,7 @@ title: 与扩展交互
 扩展间交互通过暴露一个函数实现，在扩展中，使用 `registerGlobalFunction` 函数将扩展原型中的某一个成员函数暴露，允许其他扩展通过 `callGlobalFunction` 函数调用。注意，在其他扩展中直接获取某一个扩展的实例同样也是不被禁止的，但其结果是未定义的行为。
 
 ## 示例
+
 ```javascript title="src/index.js"
 class HelloExtension {
     onInit() {

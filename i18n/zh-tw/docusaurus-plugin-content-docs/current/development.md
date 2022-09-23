@@ -103,46 +103,46 @@ $(yarn bin)/jest --runInBand test/unit/components/button.test.jsx
 yarn run build
 ```
 
-Then, you can run all integration tests:
+接著，你可以執行所有集成測試:
 
 ```bash
 yarn run test:integration
 ```
 
-Or, you can run a single file of integration tests (in this example, the `backpack` tests):
+或是你可以執行集成測試中的單個文件 (在這個範例中使用`backpack` 測試):
 
 ```bash
 $(yarn bin)/jest --runInBand test/integration/backpack.test.js
 ```
 
-If you want to watch the browser as it runs the test, rather than running headless, use:
+如果你想用瀏覽器監視測試，請在後面添加參數
 
 ```bash
 USE_HEADLESS=no $(yarn bin)/jest --runInBand test/integration/backpack.test.js
 ```
 
-## Troubleshooting
+## 常見問題
 
 ### Ignoring optional dependencies
 
-When running `yarn install`, you can get warnings about optionsl dependencies:
+執行 `yarn install`可能會收到關於optional的警告
 
 ```
 npm WARN optional Skipping failed optional dependency /chokidar/fsevents:
 npm WARN notsup Not compatible with your operating system or architecture: fsevents@1.2.7
 ```
 
-You can suppress them by adding the `no-optional` switch:
+可以在後面添加 `no-optional` 參數解決此問題:
 
 ```
 yarn install --no-optional
 ```
 
-Further reading: [Stack Overflow](https://stackoverflow.com/questions/36725181/not-compatible-with-your-operating-system-or-architecture-fsevents1-0-11)
+參見: [Stack Overflow](https://stackoverflow.com/questions/36725181/not-compatible-with-your-operating-system-or-architecture-fsevents1-0-11)
 
 ### Resolving dependencies
 
-When installing for the first time, you can get warnings that need to be resolved:
+第一次安裝時可能會收到以下警告
 
 ```
 npm WARN eslint-config-scratch@5.0.0 requires a peer of babel-eslint@^8.0.1 but none was installed.
@@ -151,19 +151,21 @@ npm WARN scratch-paint@0.2.0-prerelease.20190318170811 requires a peer of react-
 npm WARN scratch-paint@0.2.0-prerelease.20190318170811 requires a peer of react-responsive@^4 but none was installed.
 ```
 
-You can check which versions are available:
+你可以檢查那些版本是支援的:
 
 ```
 yarn view react-intl-redux@0.* version
 ```
 
-You will need to install the required version:
+你會需要安裝指定版本:
 
 ```
 yarn install  --no-optional --save-dev react-intl-redux@^0.7
 ```
 
-The dependency itself might have more missing dependencies, which will show up like this:
+依賴的套件可能會依賴依賴的套件所依賴的套件。
+如果依賴的套件缺少依賴的套件所依賴的套件，你會收到以下警告:
+反正就是你缺套件
 
 ```
 user@machine:~/sources/scratch/clipcc-gui (491-translatable-library-objects)$ yarn install  --no-optional --save-dev react-intl-redux@^0.7
@@ -172,15 +174,27 @@ clipcc-gui@0.1.0 /media/cuideigin/Linux/sources/scratch/clipcc-gui
 └── UNMET PEER DEPENDENCY react-responsive@5.0.0
 ```
 
-You will need to install those as well:
+你也會需要安裝這些套件所依賴的套件:
 
 ```
 yarn install  --no-optional --save-dev react-responsive@^5.0.0
 ```
 
-Further reading: [Stack Overflow](https://stackoverflow.com/questions/46602286/npm-requires-a-peer-of-but-all-peers-are-in-package-json-and-node-modules)
-### Transitions
+參見: [Stack Overflow](https://stackoverflow.com/questions/46602286/npm-requires-a-peer-of-but-all-peers-are-in-package-json-and-node-modules)
+* ### 轉場
 
-These are names for the action which causes a state change. Some examples are:
+  這些名稱是會影響狀態的動作，比如說:
 
-* `START_FETCHIN
+  * `START_FETCHING_NEW`,
+  * `DONE_FETCHING_WITH_ID`,
+  * `DONE_LOADING_VM_WITH_ID`,
+  * `SET_PROJECT_ID`,
+  * `START_AUTO_UPDATING`
+
+  ### 轉場和運行狀態的關聯性
+
+  看看這個專案狀態的圖表。這些轉場動作讓我們可以自由切換載入狀態
+
+  ![Project state diagram](/img/project_state_diagram.svg)
+
+  _筆記: 為了讓圖表更精簡，我們省略了目前狀態和轉場相關的處裡_

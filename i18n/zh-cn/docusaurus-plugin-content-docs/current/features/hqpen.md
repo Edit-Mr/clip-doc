@@ -20,6 +20,7 @@ title: 高清画笔
   </tbody>
 </table>
 
+
 **示例作品: [osu! Full Remake](https://scratch.mit.edu/projects/613688710)**
 
 ## 如何使用
@@ -30,5 +31,7 @@ title: 高清画笔
 4. 生效。
 
 ## 注意
+
 1. 我们计划于在 ClipCC 3.2 正式发布此功能。
 2. 该功能可能会影响项目的渲染效率。
+3. 

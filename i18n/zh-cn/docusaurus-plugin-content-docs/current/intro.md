@@ -9,5 +9,4 @@ ClipCC 是一个基于 Scratch 的二开编辑器，添加了例如自定义返�
 
 本文档是开源的，你可以访问[此仓库](https://github.com/Clipteam/doc)查看源代码。
 
-
 ![截图](/img/screenshot-zh.jpg)

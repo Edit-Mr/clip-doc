@@ -1,11 +1,11 @@
 ---
 sidebar_position: 10
-title: 设置
+title: 設定
 ---
 
-设置项被定义在扩展文件内部根目录下的 `settings.json` 文件中，用于添加设置项到编辑器。扩展的全部设置项在扩展被载入时就会添加到编辑器中，而不是启用时。即用户可以在扩展并没有被启用的时候修改该扩展的设置项。
+設定項被定義在擴充套件檔案內部根目錄下的 `settings.json` 檔案中，用於新增設定項到編輯器。擴充套件的全部設定項在擴充套件被載入時就會新增到編輯器中，而不是啟用時。即使用者可以在擴充套件並沒有被啟用的時候修改該擴充套件的設定項。
 
-## 数据格式
+## 數據格式
 ```json title="settings.json"
 [
     {
@@ -20,16 +20,17 @@ title: 设置
     }
 ]
 ```
-所有的设置项均以 `object` 形式定义，其最终在设置中的顺序与 `settings.json` 顺序一致，基本键值说明如下：
+所有的設定項均以 `object` 形式定義，其最終在設定中的順序與 `settings.json` 順序一致，基本鍵值說明如下：
 
-**id**：设置项的 ID，注意在扩展载入后，实际的 ID 为你的扩展 ID 后加上设置项的 ID，如上述 `option1` 的实际 id 为 `your.extension.id.option1`，其中 `your.extension.id` 是你的扩展 ID，其被定义于 `info.json`。这确保了插件间的设置不会出现冲突。
+**id**：設定項的 ID，注意在擴充套件載入後，實際的 ID 為你的擴充套件 ID 後加上設定項的 ID，如上述 `option1` 的實際 id 為 `your.extension.id.option1`，其中 `your.extension.id` 是你的擴充套件 ID，其被定義于 `info.json`。這確保了外掛間的設定不會出現衝突。
 
-**type**：设置项类型，对应了在设置中的控件类型，具体取值见后。
+**type**：設定項型別，對應了在設定中的控制元件型別，具體取值見後。
 
-**default**：默认值，如果对应的控件是可输入的，那么默认值同时会作为该控件的 placeholder 属性。当设置被用户恢复默认值时，该设置项将被设置为此值。
-## 类型
-### Boolean（布尔值）
-这个设置项是一个布尔类型，其值只能是 `true` 或者 `false`，对应的控件为 `Switch`。
+**default**：預設值，如果對應的控制元件是可輸入的，那麼預設值同時會作為該控制元件的 placeholder 屬性。當設定被使用者恢復預設值時，該設定項將被設定為此值。
+
+## 型別
+### Boolean（布林值）
+這個設定項是一個布林型別，其值只能是 `true` 或者 `false`，對應的控制元件為 `Switch`。
 ```json
 {
     "id": "option",
@@ -37,8 +38,8 @@ title: 设置
     "default": false
 }
 ```
-### Number（数字）
-这个设置项是一个数字类型，对应的控件为 `Input`。
+### Number（數字）
+這個設定項是一個數字型別，對應的控制元件為 `Input`。
 ```json
 {
     "id": "option",
@@ -50,13 +51,13 @@ title: 设置
 }
 ```
 
-**max**：（可选）限定数字的最大值。
+**max**：（可選）限定數字的最大值。
 
-**min**：（可选）限定数字的最小值。
+**min**：（可選）限定數字的最小值。
 
-**precision**：（可选）限定数字的小数点后位数，`0` 表示限定为整数。
-### Selector (选择器)
-这个设置项是一个字符串类型，对应的控件为 `Selector`
+**precision**：（可選）限定數字的小數點后位數，`0` 表示限定為整數。
+### Selector (選擇器)
+這個設定項是一個字串型別，對應的控制元件為 `Selector`
 ```json
 {
     "id": "option",
@@ -77,18 +78,18 @@ title: 设置
     }]
 }
 ```
-**items**：设置选择器的全部选项，每个选项应当以一个对象的形式说明，这个对象的 `id` 表示该选项的值，`message` 表示对应的翻译 ID。
-## 翻译
-设置项应当有翻译文本以及（可选的）描述文本。如果一个设置项没有设置描述文本的翻译，那么不会显示其描述文本。
+**items**：設定選擇器的全部選項，每個選項應當以一個對象的形式說明，這個對象的 `id` 表示該選項的值，`message` 表示對應的翻譯 ID。
+## 翻譯
+設定項應當有翻譯文字以及（可選的）描述文字。如果一個設定項沒有設定描述文字的翻譯，那麼不會顯示其描述文字。
 ```json
 {
     "your.extension.id.settings.option1": "Option 1",
     "your.extension.id.settings.option1.description": "Help message for option 1"
 }
 ```
-如上述内容所示，设置项翻译的键应当为 `your.extension.id.settings` 加上设置项 ID 的形式，对应的描述文本的键应在其后面添加 `.description`。
-## 接口
+如上述內容所示，設定項翻譯的鍵應當為 `your.extension.id.settings` 加上設定項 ID 的形式，對應的描述文字的鍵應在其後面新增 `.description`。
+## 介面
 ```javascript
 function getSettings (id: string): any;
 ```
-效果: 获取设置中某项的值
+效果: 獲取設定中某項的值
