@@ -1,0 +1,14 @@
+{
+  "item.label.Download": {
+    "message": "下載",
+    "description": "Navbar item with label Download"
+  },
+  "item.label.Docs": {
+    "message": "文檔",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.API": {
+    "message": "API",
+    "description": "Navbar item with label API"
+  }
+}
