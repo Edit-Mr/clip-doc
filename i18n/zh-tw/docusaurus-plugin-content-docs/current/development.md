@@ -181,7 +181,7 @@ yarn install  --no-optional --save-dev react-responsive@^5.0.0
 ```
 
 參見: [Stack Overflow](https://stackoverflow.com/questions/46602286/npm-requires-a-peer-of-but-all-peers-are-in-package-json-and-node-modules)
-* ### 轉場
+### 轉場
 
   這些名稱是會影響狀態的動作，比如說:
 
